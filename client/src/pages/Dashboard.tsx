@@ -203,6 +203,12 @@ export default function Dashboard() {
         </div>
       )}
 
+      <footer className="container max-w-5xl mx-auto px-4 pb-8 text-center">
+        <p className="text-zinc-600 font-body text-sm tracking-widest uppercase">
+          Created by <span className="text-primary/70">Arebellj</span>
+        </p>
+      </footer>
+
       <CreateTargetDialog />
     </div>
   );
