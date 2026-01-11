@@ -83,6 +83,11 @@ export async function registerRoutes(
     res.status(204).send();
   });
 
+  app.delete(api.targets.deleteAll.path, async (req, res) => {
+    await storage.deleteAllData();
+    res.status(204).send();
+  });
+
   // Logs
   app.get(api.logs.list.path, async (req, res) => {
     const targetId = Number(req.params.targetId);

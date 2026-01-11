@@ -15,6 +15,7 @@ export interface IStorage {
   createTarget(target: InsertTarget): Promise<Target>;
   updateTarget(id: number, updates: Partial<InsertTarget> & { progress?: number; isComplete?: boolean }): Promise<Target | undefined>;
   deleteTarget(id: number): Promise<void>;
+  deleteAllData(): Promise<void>;
   
   getLogs(targetId: number): Promise<Log[]>;
   createLog(log: InsertLog): Promise<Log>;
@@ -49,6 +50,11 @@ export class DatabaseStorage implements IStorage {
   async deleteTarget(id: number): Promise<void> {
     await db.delete(logs).where(eq(logs.targetId, id)); // Clean up logs first
     await db.delete(targets).where(eq(targets.id, id));
+  }
+
+  async deleteAllData(): Promise<void> {
+    await db.delete(logs);
+    await db.delete(targets);
   }
 
   async getLogs(targetId: number): Promise<Log[]> {

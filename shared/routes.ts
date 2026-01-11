@@ -60,6 +60,13 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    deleteAll: {
+      method: 'DELETE' as const,
+      path: '/api/targets',
+      responses: {
+        204: z.void(),
+      },
+    },
   },
   logs: {
     list: {
