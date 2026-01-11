@@ -1,19 +1,25 @@
 import { useState } from "react";
-import { useLogs, useCreateLog } from "@/hooks/use-targets";
+import { useLogs, useCreateLog, useUpdateTarget } from "@/hooks/use-targets";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
-import { Send, FileText, Loader2 } from "lucide-react";
+import { Send, FileText, Loader2, Gauge } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
 interface LogsListProps {
   targetId: number;
+  currentProgress?: number;
 }
 
-export function LogsList({ targetId }: LogsListProps) {
+export function LogsList({ targetId, currentProgress = 0 }: LogsListProps) {
   const { data: logs, isLoading } = useLogs(targetId);
   const createLog = useCreateLog();
+  const updateTarget = useUpdateTarget();
   const [newLog, setNewLog] = useState("");
+  const [tempProgress, setTempProgress] = useState(currentProgress);
+  const [showProgress, setShowProgress] = useState(false);
 
   const handleAddLog = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,16 +27,58 @@ export function LogsList({ targetId }: LogsListProps) {
     
     createLog.mutate(
       { targetId, description: newLog },
-      { onSuccess: () => setNewLog("") }
+      { 
+        onSuccess: () => {
+          setNewLog("");
+          if (tempProgress !== currentProgress) {
+            updateTarget.mutate({
+              id: targetId,
+              progress: tempProgress,
+              isComplete: tempProgress === 100
+            });
+          }
+          setShowProgress(false);
+        }
+      }
     );
   };
 
   return (
     <div className="flex flex-col h-full bg-zinc-950/50 rounded-lg border border-zinc-800/50 overflow-hidden">
-      <div className="p-3 bg-zinc-900/50 border-b border-zinc-800 flex items-center gap-2">
-        <FileText className="w-4 h-4 text-zinc-500" />
-        <h4 className="text-xs font-display uppercase tracking-wider text-zinc-400">Activity Log</h4>
+      <div className="p-3 bg-zinc-900/50 border-b border-zinc-800 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FileText className="w-4 h-4 text-zinc-500" />
+          <h4 className="text-xs font-display uppercase tracking-wider text-zinc-400">Activity Log</h4>
+        </div>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => setShowProgress(!showProgress)}
+          className={cn(
+            "h-7 px-2 text-[10px] font-bold uppercase tracking-widest transition-colors",
+            showProgress ? "bg-primary/20 text-primary" : "text-zinc-500 hover:text-zinc-300"
+          )}
+        >
+          <Gauge className="w-3 h-3 mr-1" />
+          {showProgress ? "Hide Progress" : "Update Progress"}
+        </Button>
       </div>
+
+      {showProgress && (
+        <div className="p-4 bg-zinc-900/30 border-b border-zinc-800 animate-in slide-in-from-top duration-200">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Target Progress</span>
+            <span className="text-xl font-display font-bold text-primary">{tempProgress}%</span>
+          </div>
+          <Slider
+            value={[tempProgress]}
+            max={100}
+            step={1}
+            onValueChange={(vals) => setTempProgress(vals[0])}
+            className="cursor-grab active:cursor-grabbing"
+          />
+        </div>
+      )}
       
       <ScrollArea className="flex-1 h-[150px] p-4">
         {isLoading ? (

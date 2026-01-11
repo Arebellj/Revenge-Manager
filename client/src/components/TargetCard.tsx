@@ -131,23 +131,23 @@ export function TargetCard({ target }: TargetCardProps) {
               "text-2xl font-display font-bold tabular-nums",
               target.isComplete ? "text-green-500" : "text-primary"
             )}>
-              {progress}%
+              {target.progress}%
             </span>
           </div>
-          <Slider
-            value={[progress]}
-            max={100}
-            step={1}
-            onValueChange={handleProgressChange}
-            onValueCommit={handleProgressCommit}
-            className={cn(
-              "cursor-grab active:cursor-grabbing",
-              target.isComplete && "[&>.relative>.absolute]:bg-green-600"
-            )}
-          />
+          <div className="h-4 bg-zinc-800 rounded-full overflow-hidden shadow-inner border border-zinc-700/50">
+            <motion.div 
+              className={cn(
+                "h-full shadow-[0_0_20px_rgba(220,38,38,0.5)]",
+                target.isComplete ? "bg-gradient-to-r from-green-900 via-green-600 to-green-500" : "bg-gradient-to-r from-red-900 via-red-600 to-red-500"
+              )}
+              initial={{ width: 0 }}
+              animate={{ width: `${target.progress}%` }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+            />
+          </div>
         </div>
 
-        <LogsList targetId={target.id} />
+        <LogsList targetId={target.id} currentProgress={target.progress} />
       </CardContent>
     </Card>
   );
