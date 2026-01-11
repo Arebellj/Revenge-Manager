@@ -2,11 +2,48 @@ import { useTargets } from "@/hooks/use-targets";
 import { TargetCard } from "@/components/TargetCard";
 import { CreateTargetDialog } from "@/components/CreateTargetDialog";
 import { Progress } from "@/components/ui/progress";
-import { Skull, Crosshair, Users, Trophy } from "lucide-react";
+import { Skull, Crosshair, Users, Trophy, Trash2, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export default function Dashboard() {
   const { data: targets, isLoading, error } = useTargets();
+  const { toast } = useToast();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteAll = async () => {
+    try {
+      setIsDeleting(true);
+      await apiRequest("DELETE", "/api/targets");
+      queryClient.invalidateQueries({ queryKey: ["/api/targets"] });
+      toast({
+        title: "Tabula Rasa",
+        description: "All records of your vengeance have been erased.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Operation Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -127,6 +164,44 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+
+      {targets && targets.length > 0 && (
+        <div className="container max-w-5xl mx-auto px-4 pb-12 flex justify-center">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                variant="destructive" 
+                size="sm" 
+                className="opacity-50 hover:opacity-100 transition-opacity flex gap-2 items-center"
+                disabled={isDeleting}
+              >
+                <Trash2 className="w-4 h-4" />
+                Purge All Records
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-zinc-950 border-zinc-800">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-white flex items-center gap-2">
+                  <AlertTriangle className="text-primary w-5 h-5" />
+                  Absolute Erasure
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-zinc-400">
+                  This will permanently delete ALL revenge targets and their associated logs. This action cannot be undone. Are you certain you wish to proceed with this purge?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-zinc-900 text-zinc-400 border-zinc-800 hover:bg-zinc-800">Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={handleDeleteAll}
+                  className="bg-primary text-white hover:bg-primary/90"
+                >
+                  Confirm Purge
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      )}
 
       <CreateTargetDialog />
     </div>
