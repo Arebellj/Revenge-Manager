@@ -83,7 +83,17 @@ export function TargetCard({ target }: TargetCardProps) {
                 </span>
               )}
             </div>
-            <CardTitle className="text-2xl text-white font-display tracking-wide">{target.name}</CardTitle>
+            <CardTitle className={cn(
+              "text-2xl text-white font-display tracking-wide flex items-center gap-3",
+              target.name.toLowerCase() === "isaam" && "text-primary animate-glow-red"
+            )}>
+              {target.name}
+              {target.name.toLowerCase() === "isaam" && (
+                <span className="text-xs font-bold bg-primary/20 text-primary px-2 py-0.5 rounded border border-primary/50 animate-pulse">
+                  [TOP PRIORITY]
+                </span>
+              )}
+            </CardTitle>
           </div>
           
           <AlertDialog>
