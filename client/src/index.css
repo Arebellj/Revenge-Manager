@@ -81,17 +81,17 @@ input[type=range]::-webkit-slider-runnable-track {
   font-family: var(--font-horror);
 }
 
-@keyframes glow-red {
+@keyframes glow-purple {
   0%, 100% {
-    text-shadow: 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary)), 0 0 15px hsl(var(--primary));
+    text-shadow: 0 0 5px #a855f7, 0 0 10px #a855f7, 0 0 15px #a855f7;
   }
   50% {
-    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary));
+    text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 30px #a855f7;
     transform: scale(1.02);
   }
 }
 
-.animate-glow-red {
-  animation: glow-red 2s ease-in-out infinite;
+.animate-glow-purple {
+  animation: glow-purple 2s ease-in-out infinite;
   display: inline-block;
 }

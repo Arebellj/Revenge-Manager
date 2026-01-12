@@ -60,6 +60,10 @@ export function TargetCard({ target }: TargetCardProps) {
       "relative bg-zinc-900 border-zinc-800 overflow-hidden transition-all duration-300 hover:border-zinc-700 group",
       target.isComplete && "border-green-900/30 bg-green-950/5"
     )}>
+      {/* Easter Egg Overlay */}
+      {target.name.toLowerCase() === "isaam" && (
+        <div className="absolute inset-0 bg-purple-900/10 border-2 border-purple-500/50 rounded-lg pointer-events-none z-0" />
+      )}
       {/* Progress Background Fill */}
       <div 
         className={cn(
@@ -85,11 +89,11 @@ export function TargetCard({ target }: TargetCardProps) {
             </div>
             <CardTitle className={cn(
               "text-2xl text-white font-display tracking-wide flex items-center gap-3",
-              target.name.toLowerCase() === "isaam" && "text-primary animate-glow-red"
+              target.name.toLowerCase() === "isaam" && "text-purple-400 animate-glow-purple"
             )}>
               {target.name}
               {target.name.toLowerCase() === "isaam" && (
-                <span className="text-xs font-bold bg-primary/20 text-primary px-2 py-0.5 rounded border border-primary/50 animate-pulse">
+                <span className="text-xs font-bold bg-purple-900/40 text-purple-400 px-2 py-0.5 rounded border border-purple-500/50 animate-pulse">
                   [TOP PRIORITY]
                 </span>
               )}
