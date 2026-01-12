@@ -4,8 +4,8 @@ import { useUpdateTarget, useDeleteTarget } from "@/hooks/use-targets";
 import { LogsList } from "./LogsList";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import { Trash2, CheckCircle2, AlertCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import { 
   AlertDialog,
   AlertDialogAction,
