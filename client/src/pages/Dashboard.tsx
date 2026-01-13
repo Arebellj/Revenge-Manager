@@ -75,6 +75,14 @@ export default function Dashboard() {
     ? targets!.reduce((acc, t) => acc + t.progress, 0) / totalTargets 
     : 0;
 
+  const sortedTargets = targets ? [...targets].sort((a, b) => {
+    const isAEaster = ["isaam", "yagya", "tez", "arebellj"].includes(a.name.toLowerCase());
+    const isBEaster = ["isaam", "yagya", "tez", "arebellj"].includes(b.name.toLowerCase());
+    if (isAEaster && !isBEaster) return -1;
+    if (!isAEaster && isBEaster) return 1;
+    return 0;
+  }) : [];
+
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Hero Section */}
@@ -151,7 +159,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="grid gap-8">
-            {targets.map((target) => (
+            {sortedTargets.map((target) => (
               <motion.div
                 key={target.id}
                 initial={{ opacity: 0, y: 20 }}
