@@ -111,7 +111,7 @@ export function TargetCard({ target }: TargetCardProps) {
           
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-600 hover:text-red-500 hover:bg-red-950/30 transition-colors">
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-600 hover:text-red-500 hover:bg-red-950/30 transition-colors" title="Abandon Vengeance">
                 <Trash2 className="w-4 h-4" />
               </Button>
             </AlertDialogTrigger>

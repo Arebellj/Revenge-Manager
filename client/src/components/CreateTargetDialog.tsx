@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCreateTarget } from "@/hooks/use-targets";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +46,9 @@ export function CreateTargetDialog() {
             <Skull className="w-6 h-6" />
             New Vengeance Target
           </DialogTitle>
+          <DialogDescription className="text-zinc-500">
+            Enter the details of your new target to begin tracking your revenge.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
           <div className="space-y-2">

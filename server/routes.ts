@@ -94,14 +94,17 @@ export async function registerRoutes(
 
   // Logs
   app.get(api.logs.list.path, async (req, res) => {
-    const targetId = Number(req.params.targetId);
-    // Check target exists? Optional but good practice.
-    const target = await storage.getTarget(targetId);
-    if (!target) {
-       return res.status(404).json({ message: 'Target not found' });
+    try {
+      const targetId = Number(req.params.targetId);
+      const target = await storage.getTarget(targetId);
+      if (!target) {
+        return res.status(404).json({ message: 'Target not found' });
+      }
+      const logs = await storage.getLogs(targetId);
+      res.json(logs);
+    } catch (err) {
+      res.status(500).json({ message: 'Internal server error' });
     }
-    const logs = await storage.getLogs(targetId);
-    res.json(logs);
   });
 
   app.post(api.logs.create.path, async (req, res) => {
