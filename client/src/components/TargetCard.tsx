@@ -55,7 +55,9 @@ export function TargetCard({ target }: TargetCardProps) {
     deleteTarget.mutate(target.id);
   };
 
-  const isEasterEgg = ["isaam", "yagya", "tez"].includes(target.name.toLowerCase());
+  const isPurpleEgg = ["isaam", "yagya", "tez"].includes(target.name.toLowerCase());
+  const isArebellj = target.name.toLowerCase() === "arebellj";
+  const isEasterEgg = isPurpleEgg || isArebellj;
 
   return (
     <Card className={cn(
@@ -94,9 +96,14 @@ export function TargetCard({ target }: TargetCardProps) {
               isEasterEgg && "text-purple-400 animate-glow-purple"
             )}>
               {target.name}
-              {isEasterEgg && (
+              {isPurpleEgg && (
                 <span className="text-xs font-bold bg-purple-900/40 text-purple-400 px-2 py-0.5 rounded border border-purple-500/50 animate-pulse">
                   [TOP PRIORITY]
+                </span>
+              )}
+              {isArebellj && (
+                <span className="text-xs font-bold bg-purple-900/40 text-purple-400 px-2 py-0.5 rounded border border-purple-500/50 animate-pulse">
+                  [YOU'RE COOKED]
                 </span>
               )}
             </CardTitle>
