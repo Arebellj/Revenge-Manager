@@ -26,6 +26,10 @@ export async function registerRoutes(
   app.post(api.targets.create.path, async (req, res) => {
     try {
       const input = api.targets.create.input.parse(req.body);
+      // Trim whitespace from name
+      if (input.name) {
+        input.name = input.name.trim();
+      }
       const target = await storage.createTarget(input);
       res.status(201).json(target);
     } catch (err) {

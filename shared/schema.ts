@@ -31,7 +31,7 @@ export const logsRelations = relations(logs, ({ one }) => ({
   }),
 }));
 
-export const insertTargetSchema = createInsertSchema(targets).omit({ id: true, createdAt: true, isComplete: true });
+export const insertTargetSchema = createInsertSchema(targets).omit({ id: true, createdAt: true });
 export const insertLogSchema = createInsertSchema(logs).omit({ id: true, createdAt: true });
 
 export type Target = typeof targets.$inferSelect;
